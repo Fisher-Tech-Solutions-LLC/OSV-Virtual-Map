@@ -17,6 +17,10 @@
         var map;
 
         function initMap() {
+            var mapOptions = {
+                disableDefaultUI: true,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
             map = new google.maps.Map(document.getElementById('map'), {
                 center: {
                     lat: 42.107979,
@@ -35,6 +39,15 @@
                 map: map,
             });
 
+            var bullardbathroom = new google.maps.Marker({
+                position: new google.maps.LatLng(
+                    42.106444,
+                    -72.097345
+                ),
+                icon: image,
+                map: map,
+            });
+
             var countrysidebathroom = new google.maps.Marker({
                 position: new google.maps.LatLng(
                     42.105160,
@@ -43,16 +56,38 @@
                 icon: image,
                 map: map,
             });
-            
+
             var pot = 'Images/clay pot.png';
             var potteryshop = new google.maps.Marker({
                 position: new google.maps.LatLng(
-                    42.105229, 
+                    42.105229,
                     -72.097357
                 ),
                 icon: pot,
                 map: map,
+            });
+
+            var money = 'Images/money icon.png';
+            var minergrant = new google.maps.Marker({
+                position: new google.maps.LatLng(
+                    42.107165,
+                    -72.097722
+                ),
+                icon: money,
+                map: map,
+            });
+            
+            var barn = 'Images/barn.png';
+            var freemanfarm = new google.maps.Marker({
+                position: new google.maps.LatLng(
+                    42.103809, 
+                    -72.096426
+                ),
+                icon: barn,
+                map: map,
             })
+
+
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCt7o7MAPRpmeCI_YQftMWcRh9xezxO5A4 	&callback=initMap" async defer></script>
