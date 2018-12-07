@@ -57,6 +57,22 @@
                 map: map,
             });
 
+            var potteryString = '<div id="potterycontent">' +
+                '<h1 id="firstHeading" class="firstHeading">Pottery Shop</h1>' +
+                '<div id="bodyContent">' +
+                '<p>The <b>Pottery Shop</b>, is a favorite location for visitors, this exhibit ' +
+                'is where many of the villages pottery comes from ' +
+                'The pottery shop is originally from Goshen Connecticut where it was built around the year of 1819' +
+                'Where the original owner Hervey Brooks produced many pieces of pottery ' +
+                'from the years of 1828 to 1864 where he performed his last firing at 85 years old ' +
+                
+               '</p>'
+            '</div>';
+            
+            var infowindow = new google.maps.InfoWindow({
+                content: potteryString
+            });
+            
             var pot = 'Images/clay pot.png';
             var potteryshop = new google.maps.Marker({
                 position: new google.maps.LatLng(
@@ -65,6 +81,11 @@
                 ),
                 icon: pot,
                 map: map,
+                title: 'Pottery Shop'
+            });
+
+            potteryshop.addListener('click', function() {
+                infowindow.open(map, potteryshop);
             });
 
             var money = 'Images/money icon.png';
@@ -76,11 +97,11 @@
                 icon: money,
                 map: map,
             });
-            
+
             var barn = 'Images/barn.png';
             var freemanfarm = new google.maps.Marker({
                 position: new google.maps.LatLng(
-                    42.103809, 
+                    42.103809,
                     -72.096426
                 ),
                 icon: barn,
@@ -89,6 +110,7 @@
 
 
         }
+
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCt7o7MAPRpmeCI_YQftMWcRh9xezxO5A4 	&callback=initMap" async defer></script>
     <script src="places.js"> </script>
