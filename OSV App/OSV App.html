@@ -13,6 +13,7 @@
         <h1>Fisher Tech Solutions</h1>
     </div>
     <div id="map"></div>
+    <div id="legend"><h3>Legend</h3></div>
     <script>
         var map;
 
@@ -65,14 +66,14 @@
                 'The pottery shop is originally from Goshen Connecticut where it was built around the year of 1819' +
                 'Where the original owner Hervey Brooks produced many pieces of pottery ' +
                 'from the years of 1828 to 1864 where he performed his last firing at 85 years old ' +
-                
-               '</p>'
+
+                '</p>'
             '</div>';
-            
-            var infowindow = new google.maps.InfoWindow({
+
+            var potterywindow = new google.maps.InfoWindow({
                 content: potteryString
             });
-            
+
             var pot = 'Images/clay pot.png';
             var potteryshop = new google.maps.Marker({
                 position: new google.maps.LatLng(
@@ -85,7 +86,19 @@
             });
 
             potteryshop.addListener('click', function() {
-                infowindow.open(map, potteryshop);
+                potterywindow.open(map, potteryshop);
+            });
+
+            var minergrantString = '<div id="minergrantcontent">' +
+                '<h1 id="firstHeading" class ="firstHeading">Miner Grant Store</h1>' +
+                '<div id ="bodyContent">' +
+                '<p> The <b> Miner Grant Store </b>, is where visitors can find many items to bring home from their trip to the village.' +
+                'These items include crafts made in the village as other items that will help you and your family remember your visit long after you leave' +
+                '</p>'
+            '</div>';
+
+            var minergrantwindow = new google.maps.InfoWindow({
+                content: minergrantString
             });
 
             var money = 'Images/money icon.png';
@@ -96,6 +109,11 @@
                 ),
                 icon: money,
                 map: map,
+                title: 'Miner Grant Store'
+            });
+
+            minergrant.addListener('click', function() {
+                minergrantwindow.open(map, minergrant);
             });
 
             var barn = 'Images/barn.png';
@@ -107,6 +125,14 @@
                 icon: barn,
                 map: map,
             })
+
+            var legend = document.getElementById('legend');
+            var div = document.createElement('div');
+            div.innerHTML = '<img src="Images/bathroom icon.png">';
+            legend.appendChild(div);
+
+            map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
+
 
 
         }
