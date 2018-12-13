@@ -13,7 +13,9 @@
         <h1>Fisher Tech Solutions</h1>
     </div>
     <div id="map"></div>
-    <div id="legend"><h3>Legend</h3></div>
+    <div id="legend">
+        <h3>Legend</h3>
+    </div>
     <script>
         var map;
 
@@ -27,7 +29,41 @@
                     lat: 42.107979,
                     lng: -72.098670
                 },
-                zoom: 20
+                zoom: 20,
+                styles: [{
+                        elementType: 'geometry',
+                        stylers: [{
+                            color: '#ede7c0'
+                        }]
+                    },
+                    {
+                        elementType: 'labels.text.stroke',
+                        stylers: [{
+                            color: '#ede7c0'
+                        }]
+                    },
+
+                    {
+                        elementType: 'labels.text.fill',
+                        stylers: [{
+                            color: '#d38476'
+                        }]
+                    }, {
+                        featureType: 'poi',
+                        elementType: 'labels.text.fill',
+                        stylers: [{
+                            visibility: 'off'
+                        }]
+                    }, {
+                        featureType: 'road',
+                            elementType: 'geometry.stroke',
+                            stylers: [{
+                                color: '#d38476'
+                            }]
+                    }
+
+
+                ]
             });
 
             var image = 'Images/bathroom icon.png';
