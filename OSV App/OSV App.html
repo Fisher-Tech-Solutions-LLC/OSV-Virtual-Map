@@ -5,13 +5,10 @@
     <title>OSV Map</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <div id="header">
-        <h1>Fisher Tech Solutions</h1>
-    </div>
     <div id="map"></div>
     <div id="legend">
         <h3>Legend</h3>
@@ -21,7 +18,7 @@
 
         function initMap() {
             var mapOptions = {
-                disableDefaultUI: true,
+
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             }
             map = new google.maps.Map(document.getElementById('map'), {
@@ -29,7 +26,8 @@
                     lat: 42.107979,
                     lng: -72.098670
                 },
-                zoom: 20,
+                zoom: 15,
+                disableDefaultUI: true,
                 styles: [{
                         elementType: 'geometry',
                         stylers: [{
@@ -56,10 +54,10 @@
                         }]
                     }, {
                         featureType: 'road',
-                            elementType: 'geometry.stroke',
-                            stylers: [{
-                                color: '#d38476'
-                            }]
+                        elementType: 'geometry.stroke',
+                        stylers: [{
+                            color: '#d38476'
+                        }]
                     }
 
 
