@@ -100,7 +100,7 @@
                 'The pottery shop is originally from Goshen Connecticut where it was built around the year of 1819' +
                 'Where the original owner Hervey Brooks produced many pieces of pottery ' +
                 'from the years of 1828 to 1864 where he performed his last firing at 85 years old ' +
-
+                '<img src= "Images/pottery shop image.jpg" height = "150px" width = "150px">'
                 '</p>'
             '</div>';
 
@@ -158,7 +158,35 @@
                 ),
                 icon: barn,
                 map: map,
-            })
+                title: 'Freeman Farm'
+            });
+
+            var centermeetinghouseString = '<div id="centermeetinghousecontent">' +
+                '<h1 id="firstHeading" class="firstHeading">Center Meetinghouse</h1>' +
+                '<div id="bodyContent">' +
+                '<p> The <b> Center Meetinghouse </b>, moved to OSV in 1947, With its steeple pointing skyward, the meetinghouse was the dominant symbol of every New England town—the gathering place for town meetings, elections, and church services. Churchgoers attended lengthy Sunday morning and afternoon services as well as midweek prayer meetings. Many 19th-century New England towns had several different meetinghouses, reflecting the region’s increase in religious diversity after the Revolutionary War. The two largest denominations in most rural towns were Congregationalists and Baptists, both descended from the Puritan Church of the first English settlers. In many rural towns, Methodists, Universalists, Episcopalians, and Friends also had their own houses of worship.' +
+                '<img src= "Images/Center Meetinghouse image.jpg" height = "150px" width = "150px">'
+            '</p>'
+            '</div>';
+
+            var centermeetinghousewindow = new google.maps.InfoWindow({
+                content: centermeetinghouseString
+            });
+
+            var cross = 'Images/cross.png';
+            var centermeetinghouse = new google.maps.Marker({
+                position: new google.maps.LatLng(
+                    42.106540,
+                    -72.099297
+                ),
+                icon: cross,
+                map: map,
+                title: 'Center Meetinghouse'
+            });
+
+            centermeetinghouse.addListener('click', function() {
+                centermeetinghousewindow.open(map, centermeetinghouse);
+            });
 
             var legend = document.getElementById('legend');
             var div = document.createElement('div');
@@ -167,6 +195,9 @@
 
             map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
 
+            if (map.Map.zoom < 15) {
+                pot = 'Images/clay pot mini.png';
+            }
 
 
         }
