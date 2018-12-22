@@ -101,7 +101,7 @@
                 'Where the original owner Hervey Brooks produced many pieces of pottery ' +
                 'from the years of 1828 to 1864 where he performed his last firing at 85 years old ' +
                 '<img src= "Images/pottery shop image.jpg" height = "150px" width = "150px">'
-                '</p>'
+            '</p>'
             '</div>';
 
             var potterywindow = new google.maps.InfoWindow({
@@ -187,6 +187,43 @@
             centermeetinghouse.addListener('click', function() {
                 centermeetinghousewindow.open(map, centermeetinghouse);
             });
+/**
+            var schoolhouseString = '<div id = "schoolhousecontent">' +
+                '<h1 id="firstHeading" class="firstHeading">District Schoolhouse</h1>' +
+                '<div id="bodyContent">' +
+                '<p> The <b> District Schoolhouse </b>, first moved to OSV in 1961, Long before the American Revolution, most New Englanders were required to pay taxes to provide tuition-free schools for their children. By 1800, the majority of towns were divided into districts with neighborhood schools. Schools were in session between December and March, when older children did not need to work on the farm. Younger children, too small to help with chores and likely to be underfoot, also attended school between May and August. With up to 50 students of all ages, discipline was often hard to maintain, and punishments were sometimes severe. Teachers, or “school-keepers,” were usually between 17 and 25 years old and had only a district school education themselves.' +
+                '</p>'
+            '</div>';
+
+            var schoolhousewindow = new google.maps.InfoWindow({
+                content: schooolhouseString
+            });
+
+            var book = 'Images/book.png';
+            var schoolhouse = new google.maps.Marker({
+                position: new google.maps.LatLng(
+                    42.105565,
+                    -72.097745
+                ),
+                icon: book,
+                map: map,
+                title: 'Schoolhouse'
+            });
+
+            schoolhouse.addListener('click', function() {
+                schoolhousewindow.open(map, schoolhouse);
+            });
+**/
+            var sheep = 'Images/sheep.png';
+            var fennosheeppen = new google.maps.Marker({
+                position: new google.maps.LatLng(
+                    42.106754,
+                    -72.099173
+                ),
+                icon: sheep,
+                map: map,
+                title: 'Fenno Sheep Pen'
+            });
 
             var legend = document.getElementById('legend');
             var div = document.createElement('div');
@@ -195,9 +232,48 @@
 
             map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
 
-            if (map.Map.zoom < 15) {
-                pot = 'Images/clay pot mini.png';
-            }
+
+            google.maps.event.addListener(map, 'zoom_changed', function() {
+
+                var zoom = map.getZoom();
+                markerWidth = (zoom / 2) * 2
+                markerHeight = (zoom / 2) * 2
+
+                //set the icon with the new size to the marker
+                vcbathroom.setIcon({
+                    url: image,
+                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                });
+                bullardbathroom.setIcon({
+                    url: image,
+                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                });
+                countrysidebathroom.setIcon({
+                    url: image,
+                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                });
+                centermeetinghouse.setIcon({
+                    url: cross,
+                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                });
+                potteryshop.setIcon({
+                    url: pot,
+                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                });
+                freemanfarm.setIcon({
+                    url: barn,
+                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                });
+                minergrant.setIcon({
+                    url: money,
+                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                });
+                fennosheeppen.setIcon({
+                    url: sheep,
+                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                });
+
+            });
 
 
         }
