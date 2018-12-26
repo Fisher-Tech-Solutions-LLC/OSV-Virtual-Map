@@ -59,10 +59,29 @@
                             color: '#d38476'
                         }]
                     }
-
-
                 ]
             });
+
+            infoWindow = new google.maps.InfoWindow;
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    infoWindow.setPosition(pos);
+                    infoWindow.setContent('Location found.');
+                    infoWindow.open(map);
+                    map.setCenter(pos);
+                }, function() {
+                    handleLocationError(true, infoWindow, map.getCenter());
+                });
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infoWindow, map.getCenter());
+            }
+
 
             var image = 'Images/bathroom icon.png';
             var vcbathroom = new google.maps.Marker({
@@ -187,33 +206,33 @@
             centermeetinghouse.addListener('click', function() {
                 centermeetinghousewindow.open(map, centermeetinghouse);
             });
-/**
-            var schoolhouseString = '<div id = "schoolhousecontent">' +
-                '<h1 id="firstHeading" class="firstHeading">District Schoolhouse</h1>' +
-                '<div id="bodyContent">' +
-                '<p> The <b> District Schoolhouse </b>, first moved to OSV in 1961, Long before the American Revolution, most New Englanders were required to pay taxes to provide tuition-free schools for their children. By 1800, the majority of towns were divided into districts with neighborhood schools. Schools were in session between December and March, when older children did not need to work on the farm. Younger children, too small to help with chores and likely to be underfoot, also attended school between May and August. With up to 50 students of all ages, discipline was often hard to maintain, and punishments were sometimes severe. Teachers, or “school-keepers,” were usually between 17 and 25 years old and had only a district school education themselves.' +
-                '</p>'
-            '</div>';
+            /**
+                        var schoolhouseString = '<div id = "schoolhousecontent">' +
+                            '<h1 id="firstHeading" class="firstHeading">District Schoolhouse</h1>' +
+                            '<div id="bodyContent">' +
+                            '<p> The <b> District Schoolhouse </b>, first moved to OSV in 1961, Long before the American Revolution, most New Englanders were required to pay taxes to provide tuition-free schools for their children. By 1800, the majority of towns were divided into districts with neighborhood schools. Schools were in session between December and March, when older children did not need to work on the farm. Younger children, too small to help with chores and likely to be underfoot, also attended school between May and August. With up to 50 students of all ages, discipline was often hard to maintain, and punishments were sometimes severe. Teachers, or “school-keepers,” were usually between 17 and 25 years old and had only a district school education themselves.' +
+                            '</p>'
+                        '</div>';
 
-            var schoolhousewindow = new google.maps.InfoWindow({
-                content: schooolhouseString
-            });
+                        var schoolhousewindow = new google.maps.InfoWindow({
+                            content: schooolhouseString
+                        });
 
-            var book = 'Images/book.png';
-            var schoolhouse = new google.maps.Marker({
-                position: new google.maps.LatLng(
-                    42.105565,
-                    -72.097745
-                ),
-                icon: book,
-                map: map,
-                title: 'Schoolhouse'
-            });
+                        var book = 'Images/book.png';
+                        var schoolhouse = new google.maps.Marker({
+                            position: new google.maps.LatLng(
+                                42.105565,
+                                -72.097745
+                            ),
+                            icon: book,
+                            map: map,
+                            title: 'Schoolhouse'
+                        });
 
-            schoolhouse.addListener('click', function() {
-                schoolhousewindow.open(map, schoolhouse);
-            });
-**/
+                        schoolhouse.addListener('click', function() {
+                            schoolhousewindow.open(map, schoolhouse);
+                        });
+            **/
             var sheep = 'Images/sheep.png';
             var fennosheeppen = new google.maps.Marker({
                 position: new google.maps.LatLng(
@@ -274,6 +293,14 @@
                 });
 
             });
+
+            function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+                infoWindow.setPosition(pos);
+                infoWindow.setContent(browserHasGeolocation ?
+                    'Error: The Geolocation service failed.' :
+                    'Error: Your browser doesn\'t support geolocation.');
+                infoWindow.open(map);
+            }
 
 
         }
