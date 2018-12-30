@@ -82,34 +82,37 @@
                 handleLocationError(false, infoWindow, map.getCenter());
             }
 
+            var json = [{
+                    "id": "vcbathroom",
+                    "title": "vcbathroom",
+                    "longitude": "42.108125",
+                    "latitude": "-72.098474"
+                },
+                {
+                    "id": "bullardbathroom",
+                    "title": "bullardbathroom",
+                    "longitude": "42.106444",
+                    "latitude": "-72.097345"
+                },
+                {
+                    "id": "countrysidebathroom",
+                    "title": "countrysidebathroom",
+                    "longitude": "42.105160",
+                    "latitude": "-72.095643"
+                }
+            ];
 
-            var image = 'Images/bathroom icon.png';
-            var vcbathroom = new google.maps.Marker({
-                position: new google.maps.LatLng(
-                    42.108125,
-                    -72.098474
-                ),
-                icon: image,
-                map: map,
-            });
-
-            var bullardbathroom = new google.maps.Marker({
-                position: new google.maps.LatLng(
-                    42.106444,
-                    -72.097345
-                ),
-                icon: image,
-                map: map,
-            });
-
-            var countrysidebathroom = new google.maps.Marker({
-                position: new google.maps.LatLng(
-                    42.105160,
-                    -72.095643
-                ),
-                icon: image,
-                map: map,
-            });
+            var bathrooms = [];
+            for (var i = 0; i < 3; i++) {
+                var obj = json[i];
+                var bathroom = new google.maps.Marker({
+                    position: new google.maps.LatLng(obj.longitude, obj.latitude),
+                    map: map,
+                    icon: 'Images/bathroom icon.png',
+                    title: obj.title,
+                });
+                bathrooms.push(bathroom);
+            }
 
             var potteryString = '<div id="potterycontent">' +
                 '<h1 id="firstHeading" class="firstHeading">Pottery Shop</h1>' +
@@ -257,20 +260,15 @@
                 var zoom = map.getZoom();
                 markerWidth = (zoom / 2) * 2
                 markerHeight = (zoom / 2) * 2
-
+                
+                for(var i=0;i<3;i++){
+                    var bathroom = bathrooms[i];
+                    bathroom.setIcon({
+                        url: "Images/bathroom icon.png",
+                        scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                    });
+                };
                 //set the icon with the new size to the marker
-                vcbathroom.setIcon({
-                    url: image,
-                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
-                });
-                bullardbathroom.setIcon({
-                    url: image,
-                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
-                });
-                countrysidebathroom.setIcon({
-                    url: image,
-                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
-                });
                 centermeetinghouse.setIcon({
                     url: cross,
                     scaledSize: new google.maps.Size(markerWidth, markerHeight)
@@ -301,13 +299,9 @@
                     'Error: Your browser doesn\'t support geolocation.');
                 infoWindow.open(map);
             }
-
-
         }
-
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCt7o7MAPRpmeCI_YQftMWcRh9xezxO5A4 	&callback=initMap" async defer></script>
-    <script src="places.js"> </script>
 </body>
 
 </html>
