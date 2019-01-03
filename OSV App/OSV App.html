@@ -99,19 +99,19 @@
             }
 
             var json = [{
-                    "id": "vcbathroom",
+                    "id": "1",
                     "title": "vcbathroom",
                     "longitude": "42.108125",
                     "latitude": "-72.098474"
                 },
                 {
-                    "id": "bullardbathroom",
+                    "id": "2",
                     "title": "bullardbathroom",
                     "longitude": "42.106444",
                     "latitude": "-72.097345"
                 },
                 {
-                    "id": "countrysidebathroom",
+                    "id": "3",
                     "title": "countrysidebathroom",
                     "longitude": "42.105160",
                     "latitude": "-72.095643"
@@ -123,15 +123,20 @@
                 var obj = json[i];
                 var bathroom = new google.maps.Marker({
                     position: new google.maps.LatLng(obj.longitude, obj.latitude),
+                    id: obj.id,
                     map: map,
                     icon: 'Images/bathroom icon.png',
                     title: obj.title,
                 });
+                
+                bathrooms.push(bathroom);
+            }
+            
+            bathrooms.forEach(function(bathroom, index){
                 bathroom.addListener('click', function(){
                     setTarget(bathroom);
                 });
-                bathrooms.push(bathroom);
-            }
+            });
 
             var potteryString = '<div id="potterycontent">' +
                 '<h1 id="firstHeading" class="firstHeading">Pottery Shop</h1>' +
