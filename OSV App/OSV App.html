@@ -127,6 +127,9 @@
                     icon: 'Images/bathroom icon.png',
                     title: obj.title,
                 });
+                bathroom.addListener('click', function(){
+                    setTarget(bathroom);
+                });
                 bathrooms.push(bathroom);
             }
 
@@ -159,6 +162,7 @@
 
             potteryshop.addListener('click', function() {
                 potterywindow.open(map, potteryshop);
+                setTarget(potteryshop);
             });
 
             var minergrantString = '<div id="minergrantcontent">' +
@@ -186,6 +190,7 @@
 
             minergrant.addListener('click', function() {
                 minergrantwindow.open(map, minergrant);
+                setTarget(minergrant);
             });
 
             var barn = 'Images/barn.png';
@@ -203,13 +208,13 @@
                 '<h1 id="firstHeading" class="firstHeading">Center Meetinghouse</h1>' +
                 '<div id="bodyContent">' +
                 '<p> The <b> Center Meetinghouse </b>, moved to OSV in 1947, With its steeple pointing skyward, the meetinghouse was the dominant symbol of every New England town—the gathering place for town meetings, elections, and church services. Churchgoers attended lengthy Sunday morning and afternoon services as well as midweek prayer meetings. Many 19th-century New England towns had several different meetinghouses, reflecting the region’s increase in religious diversity after the Revolutionary War. The two largest denominations in most rural towns were Congregationalists and Baptists, both descended from the Puritan Church of the first English settlers. In many rural towns, Methodists, Universalists, Episcopalians, and Friends also had their own houses of worship.' + '<br>' +
-                '<img src= "Images/Center Meetinghouse image.jpg" height = "150px" width = "150px">'
-            '</p>'
+                '<img src= "Images/Center Meetinghouse image.jpg" height = "150px" width = "150px">  </p>' +
             '</div>';
 
             var centermeetinghousewindow = new google.maps.InfoWindow({
                 content: centermeetinghouseString
             });
+
 
             var cross = 'Images/cross.png';
             var centermeetinghouse = new google.maps.Marker({
@@ -224,6 +229,7 @@
 
             centermeetinghouse.addListener('click', function() {
                 centermeetinghousewindow.open(map, centermeetinghouse);
+                setTarget(centermeetinghouse);
             });
             /**
                         var schoolhouseString = '<div id = "schoolhousecontent">' +
@@ -261,6 +267,10 @@
                 icon: sheep,
                 map: map,
                 title: 'Fenno Sheep Pen'
+            });
+            
+            fennosheeppen.addListener('click', function(){
+                setTarget(fennosheeppen);
             });
 
             var legend = document.getElementById('legend');
@@ -314,23 +324,24 @@
                     'Error: The Geolocation service failed.' :
                     'Error: Your browser doesn\'t support geolocation.');
                 infoWindow.open(map);
-            }
+            };
 
 
             function calculateAndDisplayRoute(directionsService, directionsDisplay) {
                 var pos = navigator.geolocation.getCurrentPosition(function(position) {
                     var pos = {
-                        lat: parseFloat( position.coords.latitude),
-                        lng: parseFloat( position.coords.longitude)
+                        lat: parseFloat(position.coords.latitude),
+                        lng: parseFloat(position.coords.longitude)
                     }
                 });
+
                 
-                var targetlat = potteryshop.getPosition().lat();
-                var targetlng = potteryshop.getPosition().lng();
+                var targetlat = targetobj.getPosition().lat();
+                var targetlng = targetobj.getPosition().lng();
                 var target = targetlat + "," + targetlng;
-                
+
                 directionsService.route({
-                    origin:"42.10797,-72.09867",
+                    origin: "42.10797,-72.09867",
                     destination: target,
                     travelMode: 'WALKING'
                 }, function(response, status) {
@@ -340,8 +351,13 @@
                         window.alert('Directions request failed due to ' + status);
                     }
                 });
-            }
+            };
+            var targetobj;
+            function setTarget(newTarget) {
+                targetobj = newTarget;
+            };
         }
+
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCt7o7MAPRpmeCI_YQftMWcRh9xezxO5A4 	&callback=initMap" async defer></script>
 </body>
