@@ -344,9 +344,9 @@
                 var targetlat = targetobj.getPosition().lat();
                 var targetlng = targetobj.getPosition().lng();
                 var target = targetlat + "," + targetlng;
-
+                
                 directionsService.route({
-                    origin: "42.10797,-72.09867",
+                    origin: new google.maps.LatLng(pos),
                     destination: target,
                     travelMode: 'WALKING'
                 }, function(response, status) {
