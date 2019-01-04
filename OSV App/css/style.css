@@ -4,6 +4,7 @@
 }
 
 #about {
+    margin-top: 10px;
     background: white;
     border: 3px solid #1cf55c;
     padding-left: 10px;
@@ -16,12 +17,15 @@
     text-emphasis: bold;
     border: 1px solid black;
 }
-#versioning{
-    color:lightgray;
-    text-align:right;
+
+#versioning {
+    color: lightgray;
+    text-align: right;
+    padding-top: 10px;
 }
+
 #aboutdescription {
-    margin-top: 0px;
+    margin-top: 5px;
     padding-top: 0px;
     text-align: left;
     border: 1px solid black;
@@ -45,6 +49,31 @@
     vertical-align: middle;
 }
 
+#directionpanel {
+    background-color: #253746;
+    border: 3px solid #1cf55c;
+    text-align: center;
+}
+
+#submit {
+    border-radius: 12px;
+    background-color: #253746;
+    border-color: #1cf55c;
+    text-align: center;
+    color: white;
+    
+}
+
+#submit:hover {
+    color: gray;
+}
+
+#sentence {
+    color: white;
+    font-size: 14px;
+    margin: 4px;
+    padding: 10px;
+}
 
 .map-container {
     overflow: hidden;

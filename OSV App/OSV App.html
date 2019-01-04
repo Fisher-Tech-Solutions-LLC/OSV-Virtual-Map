@@ -12,7 +12,9 @@
     <div id="map"></div>
     <div id="legend">
         <h3>Legend</h3>
-        <button type="submit" form="test" value="submit" id="submit">Submit</button>
+    </div>
+    <div id="directionpanel">
+
     </div>
     <script>
         var map;
@@ -71,14 +73,10 @@
 
             directionsDisplay.setMap(map);
 
-            document.getElementById('submit').addEventListener('click', function() {
-                calculateAndDisplayRoute(directionsService, directionsDisplay);
-            });
-
             stepDisplay = new google.maps.InfoWindow();
 
 
-            infoWindow = new google.maps.InfoWindow;
+            infoWindow = new google.maps.InfoWindow();
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var pos = {
@@ -128,12 +126,12 @@
                     icon: 'Images/bathroom icon.png',
                     title: obj.title,
                 });
-                
+
                 bathrooms.push(bathroom);
             }
-            
-            bathrooms.forEach(function(bathroom, index){
-                bathroom.addListener('click', function(){
+
+            bathrooms.forEach(function(bathroom, index) {
+                bathroom.addListener('click', function() {
                     setTarget(bathroom);
                 });
             });
@@ -214,7 +212,7 @@
                 '<div id="bodyContent">' +
                 '<p> The <b> Center Meetinghouse </b>, moved to OSV in 1947, With its steeple pointing skyward, the meetinghouse was the dominant symbol of every New England town—the gathering place for town meetings, elections, and church services. Churchgoers attended lengthy Sunday morning and afternoon services as well as midweek prayer meetings. Many 19th-century New England towns had several different meetinghouses, reflecting the region’s increase in religious diversity after the Revolutionary War. The two largest denominations in most rural towns were Congregationalists and Baptists, both descended from the Puritan Church of the first English settlers. In many rural towns, Methodists, Universalists, Episcopalians, and Friends also had their own houses of worship.' + '<br>' +
                 '<img src= "Images/Center Meetinghouse image.jpg" height = "150px" width = "150px">  </p>' +
-            '</div>';
+                '</div>';
 
             var centermeetinghousewindow = new google.maps.InfoWindow({
                 content: centermeetinghouseString
@@ -273,17 +271,26 @@
                 map: map,
                 title: 'Fenno Sheep Pen'
             });
-            
-            fennosheeppen.addListener('click', function(){
+
+            fennosheeppen.addListener('click', function() {
                 setTarget(fennosheeppen);
             });
 
             var legend = document.getElementById('legend');
-            var div = document.createElement('div');
-            div.innerHTML = '<img src="Images/bathroom icon.png">';
-            legend.appendChild(div);
+            var bathroom = document.createElement('div');
+            bathroom.innerHTML = '<img src="Images/bathroom icon.png">';
+            legend.appendChild(bathroom);
 
             map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
+
+            var directionPanel = document.getElementById('directionpanel');
+            var sentence = document.createElement('div');
+            var button = document.createElement('div');
+            button.innerHTML = '<button type="submit" form="test" value="submit" id="submit"> Go Now </button>';
+            sentence.innerHTML = '<p id="sentence"> Want Direction to ' + targetobj + '? </p>';
+            directionPanel.appendChild(sentence);
+            directionPanel.appendChild(button);
+            map.controls[google.maps.ControlPosition.TOP_CENTER].push(directionPanel);
 
 
             google.maps.event.addListener(map, 'zoom_changed', function() {
@@ -330,23 +337,24 @@
                     'Error: Your browser doesn\'t support geolocation.');
                 infoWindow.open(map);
             };
-
+            
+            var start;
 
             function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-                var pos = navigator.geolocation.getCurrentPosition(function(position) {
+                navigator.geolocation.getCurrentPosition(function(position) {
                     var pos = {
                         lat: parseFloat(position.coords.latitude),
                         lng: parseFloat(position.coords.longitude)
-                    }
+                    };
+                    start = pos.lat + "," + pos.lng;
                 });
 
-                
                 var targetlat = targetobj.getPosition().lat();
                 var targetlng = targetobj.getPosition().lng();
                 var target = targetlat + "," + targetlng;
-                
+
                 directionsService.route({
-                    origin: new google.maps.LatLng(pos),
+                    origin: start,
                     destination: target,
                     travelMode: 'WALKING'
                 }, function(response, status) {
@@ -358,9 +366,22 @@
                 });
             };
             var targetobj;
+            var sentenceString = document.getElementById("sentence");
+
             function setTarget(newTarget) {
                 targetobj = newTarget;
+                updateSentence();
             };
+
+            // Values below are related to listening to the directions panel added at the top of the web app
+            function updateSentence() {
+                sentenceString.innerHTML = null;
+                sentenceString.innerHTML = 'Want Directions to ' + targetobj.title + '?';
+            };
+
+            document.getElementById('submit').addEventListener('click', function() {
+                calculateAndDisplayRoute(directionsService, directionsDisplay);
+            });
         }
 
     </script>
