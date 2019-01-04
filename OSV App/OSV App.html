@@ -25,12 +25,14 @@
             var mapOptions = {
 
                 mapTypeId: google.maps.MapTypeId.ROADMAP
+                
             }
             map = new google.maps.Map(document.getElementById('map'), {
                 center: {
                     lat: 42.107979,
                     lng: -72.098670
                 },
+                gestureHandling: 'none',
                 zoom: 15,
                 disableDefaultUI: true,
                 styles: [{
