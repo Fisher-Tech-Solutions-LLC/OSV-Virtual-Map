@@ -10,7 +10,7 @@ The user will be able to search for other locations without having to manipulate
 <hr>
 <p> In order to test this web app in it's current state, the user must download the zip file containing the source code, extract the files to a new folder on their desktop and run the <code> Index.html </code> file using the web browser of their choice </p>
 <br>
-<p> It is important to note that OSV-Virtual-Map is not compatible with most versions of internet explorer and will not operate on most mobile operating systems, future versions should fix this </p>
+<p> It is important to note that OSV-Virtual-Map is not compatible with most versions of internet explorer <s>and will not operate on most mobile operating systems, future versions should fix this </s> however, it is completely operational on most mobile and desktop devices running modern web browsers</p>
 
 <h3> Contributing to this Project </h3>
 <hr>
