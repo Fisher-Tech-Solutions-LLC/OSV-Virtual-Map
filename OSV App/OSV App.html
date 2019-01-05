@@ -25,14 +25,14 @@
             var mapOptions = {
 
                 mapTypeId: google.maps.MapTypeId.ROADMAP
-                
+
             }
             map = new google.maps.Map(document.getElementById('map'), {
                 center: {
                     lat: 42.107979,
                     lng: -72.098670
                 },
-                gestureHandling: 'none',
+                gestureHandling: 'greedy',
                 zoom: 15,
                 disableDefaultUI: true,
                 styles: [{
@@ -77,7 +77,6 @@
 
             stepDisplay = new google.maps.InfoWindow();
 
-
             infoWindow = new google.maps.InfoWindow();
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
@@ -98,21 +97,22 @@
                 handleLocationError(false, infoWindow, map.getCenter());
             }
 
+            //bathrooms are added dynamically from JSON, once PHP is implemented this will be moved to a seperate file in the project
             var json = [{
                     "id": "1",
-                    "title": "vcbathroom",
+                    "title": "visitor center bathroom",
                     "longitude": "42.108125",
                     "latitude": "-72.098474"
                 },
                 {
                     "id": "2",
-                    "title": "bullardbathroom",
+                    "title": "bullard bathroom",
                     "longitude": "42.106444",
                     "latitude": "-72.097345"
                 },
                 {
                     "id": "3",
-                    "title": "countrysidebathroom",
+                    "title": "countryside bathroom",
                     "longitude": "42.105160",
                     "latitude": "-72.095643"
                 }
@@ -182,13 +182,13 @@
                 content: minergrantString
             });
 
-            var money = 'Images/money icon.png';
+            var giftshop = 'Images/gift shop icon.png';
             var minergrant = new google.maps.Marker({
                 position: new google.maps.LatLng(
                     42.107165,
                     -72.097722
                 ),
-                icon: money,
+                icon: giftshop,
                 map: map,
                 title: 'Miner Grant Store'
             });
@@ -207,6 +207,10 @@
                 icon: barn,
                 map: map,
                 title: 'Freeman Farm'
+            });
+            
+            freemanfarm.addListener('click', function(){
+                setTarget(freemanfarm);
             });
 
             var centermeetinghouseString = '<div id="centermeetinghousecontent">' +
@@ -236,33 +240,34 @@
                 centermeetinghousewindow.open(map, centermeetinghouse);
                 setTarget(centermeetinghouse);
             });
-            /**
-                        var schoolhouseString = '<div id = "schoolhousecontent">' +
-                            '<h1 id="firstHeading" class="firstHeading">District Schoolhouse</h1>' +
-                            '<div id="bodyContent">' +
-                            '<p> The <b> District Schoolhouse </b>, first moved to OSV in 1961, Long before the American Revolution, most New Englanders were required to pay taxes to provide tuition-free schools for their children. By 1800, the majority of towns were divided into districts with neighborhood schools. Schools were in session between December and March, when older children did not need to work on the farm. Younger children, too small to help with chores and likely to be underfoot, also attended school between May and August. With up to 50 students of all ages, discipline was often hard to maintain, and punishments were sometimes severe. Teachers, or “school-keepers,” were usually between 17 and 25 years old and had only a district school education themselves.' +
-                            '</p>'
-                        '</div>';
 
-                        var schoolhousewindow = new google.maps.InfoWindow({
-                            content: schooolhouseString
-                        });
+            var schoolhouseString = '<div id = "schoolhousecontent">' +
+                '<h1 id="firstHeading" class="firstHeading">District Schoolhouse</h1>' +
+                '<div id="bodyContent">' +
+                '<p> The <b> District Schoolhouse </b>, first moved to OSV in 1961, Long before the American Revolution, most New Englanders were required to pay taxes to provide tuition-free schools for their children. By 1800, the majority of towns were divided into districts with neighborhood schools. Schools were in session between December and March, when older children did not need to work on the farm. Younger children, too small to help with chores and likely to be underfoot, also attended school between May and August. With up to 50 students of all ages, discipline was often hard to maintain, and punishments were sometimes severe. Teachers, or “school-keepers,” were usually between 17 and 25 years old and had only a district school education themselves.' +
+                '</p>'+
+            '</div>';
 
-                        var book = 'Images/book.png';
-                        var schoolhouse = new google.maps.Marker({
-                            position: new google.maps.LatLng(
-                                42.105565,
-                                -72.097745
-                            ),
-                            icon: book,
-                            map: map,
-                            title: 'Schoolhouse'
-                        });
+            var schoolhousewindow = new google.maps.InfoWindow({
+                content: schoolhouseString
+            });
 
-                        schoolhouse.addListener('click', function() {
-                            schoolhousewindow.open(map, schoolhouse);
-                        });
-            **/
+            var book = 'Images/book.png';
+            var schoolhouse = new google.maps.Marker({
+                position: new google.maps.LatLng(
+                    42.105565,
+                    -72.097745
+                ),
+                icon: book,
+                map: map,
+                title: 'Schoolhouse'
+            });
+
+            schoolhouse.addListener('click', function() {
+                schoolhousewindow.open(map, schoolhouse);
+                setTarget(schoolhouse);
+            });
+
             var sheep = 'Images/sheep.png';
             var fennosheeppen = new google.maps.Marker({
                 position: new google.maps.LatLng(
@@ -277,6 +282,36 @@
             fennosheeppen.addListener('click', function() {
                 setTarget(fennosheeppen);
             });
+            
+            var sawmillString = '<div id= "sawmillcontent">'+
+                '<h1 id="firstHeading" class="firstHeading">Water Powered Sawmill</h1>' +
+                '<div id="bodyContent">' +
+                '<p> This rare water-powered sawmill—erected on the millpond site that David Wight, Jr. first created in the 1790s—is used to cut lumber for Old Sturbridge Village and other historic sites. The Sawmill is based on what had been one of the oldest surviving sawmills in the area: the Nichols-Colby Sawmill of Bow, New Hampshire, which was destroyed in a 1938 hurricane.' +
+                '</p>' +
+                '</div>';
+            
+            var sawmillwindow = new google.maps.InfoWindow({
+                content: sawmillString
+            });
+            
+            var saw = 'Images/sawmill icon.png';
+            var sawmill = new google.maps.Marker({
+                position: new google.maps.LatLng(
+                      42.105463,
+                     -72.094925
+                ),
+                icon: saw,
+                map: map,
+                title: 'Saw Mill'
+            });
+            
+            sawmill.addListener('click', function(){
+                sawmillwindow.open(map, sawmill);
+                setTarget(sawmill);
+            });
+            
+            
+          
 
             var legend = document.getElementById('legend');
             var bathroom = document.createElement('div');
@@ -289,7 +324,7 @@
             var sentence = document.createElement('div');
             var button = document.createElement('div');
             button.innerHTML = '<button type="submit" form="test" value="submit" id="submit"> Go Now </button>';
-            sentence.innerHTML = '<p id="sentence"> Want Direction to ' + targetobj + '? </p>';
+            sentence.innerHTML = '<p id="sentence"> Want Direction to ' + centermeetinghouse.title + '? </p>';
             directionPanel.appendChild(sentence);
             directionPanel.appendChild(button);
             map.controls[google.maps.ControlPosition.TOP_CENTER].push(directionPanel);
@@ -298,8 +333,8 @@
             google.maps.event.addListener(map, 'zoom_changed', function() {
 
                 var zoom = map.getZoom();
-                markerWidth = (zoom / 2) * 2
-                markerHeight = (zoom / 2) * 2
+                markerWidth = (zoom / 1.5) * 2
+                markerHeight = (zoom / 1.5) * 2
 
                 for (var i = 0; i < 3; i++) {
                     var bathroom = bathrooms[i];
@@ -322,11 +357,15 @@
                     scaledSize: new google.maps.Size(markerWidth, markerHeight)
                 });
                 minergrant.setIcon({
-                    url: money,
+                    url: giftshop,
                     scaledSize: new google.maps.Size(markerWidth, markerHeight)
                 });
                 fennosheeppen.setIcon({
                     url: sheep,
+                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                });
+                schoolhouse.setIcon({
+                    url: book,
                     scaledSize: new google.maps.Size(markerWidth, markerHeight)
                 });
 
@@ -339,7 +378,7 @@
                     'Error: Your browser doesn\'t support geolocation.');
                 infoWindow.open(map);
             };
-            
+
             var start;
 
             function calculateAndDisplayRoute(directionsService, directionsDisplay) {
@@ -367,7 +406,7 @@
                     }
                 });
             };
-            var targetobj;
+            var targetobj = centermeetinghouse;
             var sentenceString = document.getElementById("sentence");
 
             function setTarget(newTarget) {
@@ -385,7 +424,6 @@
                 calculateAndDisplayRoute(directionsService, directionsDisplay);
             });
         }
-
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCt7o7MAPRpmeCI_YQftMWcRh9xezxO5A4 	&callback=initMap" async defer></script>
 </body>
