@@ -89,3 +89,17 @@
     width: 100%;
     position: absolute;
 }
+
+.infocontent{
+    border-color: #d38476;
+    border-style: solid;
+    border-width: 5px;
+    background-color: #ede7c0;
+}
+.firstHeading{
+    text-align: center;
+    color: #d38476;
+}
+.infopane{
+    background: #d38476;
+}
