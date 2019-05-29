@@ -1,6 +1,6 @@
-#map {
+#map{
     width: 100%;
-    height: 750px;
+    height: 100%;
 }
 
 #about {
@@ -61,7 +61,7 @@
     border-color: #1cf55c;
     text-align: center;
     color: white;
-    
+    padding: 16px 32px;
 }
 
 #submit:hover {
@@ -76,8 +76,9 @@
 }
 
 .map-container {
+    width: 100%;
+    padding-bottom: 56.26%;
     overflow: hidden;
-    padding-bottom: 56.25%;
     position: relative;
     height: 0;
 }
@@ -88,4 +89,72 @@
     height: 100%;
     width: 100%;
     position: absolute;
+}
+
+.infocontent{
+    border-color: #1cf55c;
+    border-style: solid;
+    border-width: 5px;
+    background-color: #253746;
+}
+.firstHeading{
+    text-align: center;
+    font-size: 16px;
+    color: white;
+}
+.bodycontent{
+    font-size: 16px;
+    color:white;
+}
+
+#settings{
+    border-width: 2px;
+    border-style: solid;
+    background-color: #ede7c0;
+}
+
+.iconSize{
+    background-color: #253746;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+}
+
+#readingpane{
+    resize:both;
+    overflow:auto;
+    background-color: #253746;
+    border-style: solid;
+    border-color: #1cf55c;
+    color: white;
+    width: 520px;
+    height: 350px;
+}
+#readingtitle{
+    font-size: 20px;
+    text-align: center;
+    border-style: solid;
+    border-color: #1cf55c;
+    padding-top: 0px;
+    margin-top: 0px;
+}
+
+#focuspane{
+    font-size: 14px;
+    text-align: center;
+    border-style:solid;
+    border-color: #d38476;
+    background-color: #ede7c0;
+    padding-right: 2px;
+    padding-left: 2px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+#footer{
+    
+}
+#ownership{
+    color: white;
 }

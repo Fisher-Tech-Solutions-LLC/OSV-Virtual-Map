@@ -1,31 +1,43 @@
+<?php
+    session_start();
+?>
+
 <!DOCTYPE html>
 <html>
 
 <head>
     <title>OSV Map</title>
-    <meta name="viewport" content="initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="js/Descriptions.js"></script>
+    <script images type="text/javascript" src="js/image-vars.js"></script>
 </head>
 
 <body>
     <div id="map"></div>
-    <div id="legend">
-        <h3>Legend</h3>
-    </div>
     <div id="directionpanel">
-
     </div>
+    <div id="settings">
+    </div>
+    <div id="readingpane">
+        <h3 id="readingtitle">Information</h3>
+        <div id="infostring">
+
+        </div>
+    </div>
+
     <script>
         var map;
+        var user;
 
         function initMap() {
             var directionsService = new google.maps.DirectionsService;
             var directionsDisplay = new google.maps.DirectionsRenderer;
             var mapOptions = {
-
                 mapTypeId: google.maps.MapTypeId.ROADMAP
-
             }
             map = new google.maps.Map(document.getElementById('map'), {
                 center: {
@@ -47,7 +59,6 @@
                             color: '#ede7c0'
                         }]
                     },
-
                     {
                         elementType: 'labels.text.fill',
                         stylers: [{
@@ -68,36 +79,47 @@
                     }
                 ]
             });
-
-            var rendererOptions = {
-                map: map
-            }
-
-            directionsDisplay.setMap(map);
-
-            stepDisplay = new google.maps.InfoWindow();
-
-            infoWindow = new google.maps.InfoWindow();
+            var userlocation;
+            var user;
+            // info window for error handling function TODO integrate with focuspane system
+            infoWindow = new google.maps.InfoWindow;
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
-                    var pos = {
+                    var userlocation = {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
                     };
-
-                    infoWindow.setPosition(pos);
-                    infoWindow.setContent('Location found.');
-                    infoWindow.open(map);
-                    map.setCenter(pos);
+                    var usericon = 'Images/usericon.png';
+                    user = new google.maps.Marker({
+                        position: new google.maps.LatLng(userlocation),
+                        id: 'userlocation',
+                        map: map,
+                        title: 'User Location',
+                        icon: 'Images/usericon.png'
+                    });
+                    infoWindow.setContent('User Location');
                 }, function() {
                     handleLocationError(true, infoWindow, map.getCenter());
                 });
             } else {
-                // Browser doesn't support Geolocation
                 handleLocationError(false, infoWindow, map.getCenter());
             }
+            // TODO add user location infowindow string? and initialize focus pane?
+            // focuspane is the object that holds the infopane shared by all locations, this way only one infopane is open at a time
+            // Current content, refers to the string used by the current infopane(focuspane)
+            var focuspane = new google.maps.InfoWindow;
 
+            function setFocusPane(currentString) {
+                focuspane.setContent('<div id="focuspane">' + '<p>' + currentString + '</p>' + '</div>');
+            };
+            var rendererOptions = {
+                map: map
+            };
+            directionsDisplay.setMap(map);
+            // Calls the user location and update function every 2 seconds
             //bathrooms are added dynamically from JSON, once PHP is implemented this will be moved to a seperate file in the project
+
+            var bathrooms = [];
             var json = [{
                     "id": "1",
                     "title": "visitor center bathroom",
@@ -117,8 +139,6 @@
                     "latitude": "-72.095643"
                 }
             ];
-
-            var bathrooms = [];
             for (var i = 0; i < 3; i++) {
                 var obj = json[i];
                 var bathroom = new google.maps.Marker({
@@ -128,33 +148,51 @@
                     icon: 'Images/bathroom icon.png',
                     title: obj.title,
                 });
-
                 bathrooms.push(bathroom);
             }
-
             bathrooms.forEach(function(bathroom, index) {
                 bathroom.addListener('click', function() {
                     setTarget(bathroom);
                 });
             });
-
-            var potteryString = '<div id="potterycontent">' +
-                '<h1 id="firstHeading" class="firstHeading">Pottery Shop</h1>' +
-                '<div id="bodyContent">' +
-                '<p>The <b>Pottery Shop</b>, is a favorite location for visitors, this exhibit ' +
-                'is where many of the villages pottery comes from ' +
-                'The pottery shop is originally from Goshen Connecticut where it was built around the year of 1819' +
-                'Where the original owner Hervey Brooks produced many pieces of pottery ' +
-                'from the years of 1828 to 1864 where he performed his last firing at 85 years old ' +
-                '<img src= "Images/pottery shop image.jpg" height = "150px" width = "150px">'
-            '</p>'
-            '</div>';
-
-            var potterywindow = new google.maps.InfoWindow({
-                content: potteryString
+            var gardens = [];
+            var json = [{
+                    "id": "1",
+                    "title": "Small House Garden",
+                    "longitude": "42.107637",
+                    "latitude": "-72.098913"
+                },
+                {
+                    "id": "2",
+                    "title": "Parsonage Garden",
+                    "longitude": "42.106387",
+                    "latitude": "-72.098081"
+                },
+                {
+                    "id": "3",
+                    "title": "Towne House Garden",
+                    "longitude": "42.106901",
+                    "latitude": "-72.096869"
+                }
+            ];
+            for (var i = 0; i < 3; i++) {
+                var obj = json[i];
+                var bathroom = new google.maps.Marker({
+                    position: new google.maps.LatLng(obj.longitude, obj.latitude),
+                    id: obj.id,
+                    map: map,
+                    icon: 'Images/gardens.png',
+                    title: obj.title,
+                });
+                bathrooms.push(bathroom);
+            }
+            bathrooms.forEach(function(bathroom, index) {
+                bathroom.addListener('click', function() {
+                    setTarget(bathroom);
+                });
             });
+            // New Locations Start Here //
 
-            var pot = 'Images/clay pot.png';
             var potteryshop = new google.maps.Marker({
                 position: new google.maps.LatLng(
                     42.105229,
@@ -164,25 +202,12 @@
                 map: map,
                 title: 'Pottery Shop'
             });
-
             potteryshop.addListener('click', function() {
-                potterywindow.open(map, potteryshop);
+                setFocusPane("Pottery Shop");
+                focuspane.open(map, potteryshop);
                 setTarget(potteryshop);
+                setReadingString(potteryString);
             });
-
-            var minergrantString = '<div id="minergrantcontent">' +
-                '<h1 id="firstHeading" class ="firstHeading">Miner Grant Store</h1>' +
-                '<div id ="bodyContent">' +
-                '<p> The <b> Miner Grant Store </b>, is where visitors can find many items to bring home from their trip to the village.' +
-                'These items include crafts made in the village as other items that will help you and your family remember your visit long after you leave' +
-                '</p>'
-            '</div>';
-
-            var minergrantwindow = new google.maps.InfoWindow({
-                content: minergrantString
-            });
-
-            var giftshop = 'Images/gift shop icon.png';
             var minergrant = new google.maps.Marker({
                 position: new google.maps.LatLng(
                     42.107165,
@@ -192,13 +217,12 @@
                 map: map,
                 title: 'Miner Grant Store'
             });
-
             minergrant.addListener('click', function() {
-                minergrantwindow.open(map, minergrant);
+                setFocusPane("Miner Grant Gift Shop");
+                focuspane.open(map, minergrant);
                 setTarget(minergrant);
+                setReadingString(minergrantString);
             });
-
-            var barn = 'Images/barn.png';
             var freemanfarm = new google.maps.Marker({
                 position: new google.maps.LatLng(
                     42.103809,
@@ -208,24 +232,11 @@
                 map: map,
                 title: 'Freeman Farm'
             });
-            
-            freemanfarm.addListener('click', function(){
+            freemanfarm.addListener('click', function() {
+                setFocusPane("Freeman Farmhouse");
+                focuspane.open(map, freemanfarm);
                 setTarget(freemanfarm);
             });
-
-            var centermeetinghouseString = '<div id="centermeetinghousecontent">' +
-                '<h1 id="firstHeading" class="firstHeading">Center Meetinghouse</h1>' +
-                '<div id="bodyContent">' +
-                '<p> The <b> Center Meetinghouse </b>, moved to OSV in 1947, With its steeple pointing skyward, the meetinghouse was the dominant symbol of every New England town—the gathering place for town meetings, elections, and church services. Churchgoers attended lengthy Sunday morning and afternoon services as well as midweek prayer meetings. Many 19th-century New England towns had several different meetinghouses, reflecting the region’s increase in religious diversity after the Revolutionary War. The two largest denominations in most rural towns were Congregationalists and Baptists, both descended from the Puritan Church of the first English settlers. In many rural towns, Methodists, Universalists, Episcopalians, and Friends also had their own houses of worship.' + '<br>' +
-                '<img src= "Images/Center Meetinghouse image.jpg" height = "150px" width = "150px">  </p>' +
-                '</div>';
-
-            var centermeetinghousewindow = new google.maps.InfoWindow({
-                content: centermeetinghouseString
-            });
-
-
-            var cross = 'Images/cross.png';
             var centermeetinghouse = new google.maps.Marker({
                 position: new google.maps.LatLng(
                     42.106540,
@@ -235,24 +246,27 @@
                 map: map,
                 title: 'Center Meetinghouse'
             });
-
             centermeetinghouse.addListener('click', function() {
-                centermeetinghousewindow.open(map, centermeetinghouse);
+                setFocusPane("Center Meetinghouse");
+                focuspane.open(map, centermeetinghouse);
                 setTarget(centermeetinghouse);
+                setReadingString(centermeetinghouseString);
             });
-
-            var schoolhouseString = '<div id = "schoolhousecontent">' +
-                '<h1 id="firstHeading" class="firstHeading">District Schoolhouse</h1>' +
-                '<div id="bodyContent">' +
-                '<p> The <b> District Schoolhouse </b>, first moved to OSV in 1961, Long before the American Revolution, most New Englanders were required to pay taxes to provide tuition-free schools for their children. By 1800, the majority of towns were divided into districts with neighborhood schools. Schools were in session between December and March, when older children did not need to work on the farm. Younger children, too small to help with chores and likely to be underfoot, also attended school between May and August. With up to 50 students of all ages, discipline was often hard to maintain, and punishments were sometimes severe. Teachers, or “school-keepers,” were usually between 17 and 25 years old and had only a district school education themselves.' +
-                '</p>'+
-            '</div>';
-
-            var schoolhousewindow = new google.maps.InfoWindow({
-                content: schoolhouseString
+            var tinshop = new google.maps.Marker({
+                position: new google.maps.LatLng(
+                    42.106490,
+                    -72.097589
+                ),
+                icon: tin,
+                map: map,
+                title: 'Tin Shop'
             });
-
-            var book = 'Images/book.png';
+            tinshop.addListener('click', function() {
+                setFocusPane("The Tin Shop");
+                focuspane.open(map, tinshop);
+                setTarget(tinshop);
+                setReadingString(tinshopString);
+            });
             var schoolhouse = new google.maps.Marker({
                 position: new google.maps.LatLng(
                     42.105565,
@@ -262,13 +276,12 @@
                 map: map,
                 title: 'Schoolhouse'
             });
-
             schoolhouse.addListener('click', function() {
-                schoolhousewindow.open(map, schoolhouse);
+                setFocusPane("The Schoolhouse");
+                focuspane.open(map, schoolhouse);
                 setTarget(schoolhouse);
+                setReadingString(schoolhouseString);
             });
-
-            var sheep = 'Images/sheep.png';
             var fennosheeppen = new google.maps.Marker({
                 position: new google.maps.LatLng(
                     42.106754,
@@ -278,48 +291,116 @@
                 map: map,
                 title: 'Fenno Sheep Pen'
             });
-
             fennosheeppen.addListener('click', function() {
+                setFocusPane("The Fenno Sheep Pen");
+                focuspane.open(map, fennosheeppen);
                 setTarget(fennosheeppen);
             });
-            
-            var sawmillString = '<div id= "sawmillcontent">'+
-                '<h1 id="firstHeading" class="firstHeading">Water Powered Sawmill</h1>' +
-                '<div id="bodyContent">' +
-                '<p> This rare water-powered sawmill—erected on the millpond site that David Wight, Jr. first created in the 1790s—is used to cut lumber for Old Sturbridge Village and other historic sites. The Sawmill is based on what had been one of the oldest surviving sawmills in the area: the Nichols-Colby Sawmill of Bow, New Hampshire, which was destroyed in a 1938 hurricane.' +
-                '</p>' +
-                '</div>';
-            
-            var sawmillwindow = new google.maps.InfoWindow({
-                content: sawmillString
-            });
-            
-            var saw = 'Images/sawmill icon.png';
             var sawmill = new google.maps.Marker({
                 position: new google.maps.LatLng(
-                      42.105463,
-                     -72.094925
+                    42.105463,
+                    -72.094925
                 ),
                 icon: saw,
                 map: map,
                 title: 'Saw Mill'
             });
-            
-            sawmill.addListener('click', function(){
-                sawmillwindow.open(map, sawmill);
+            sawmill.addListener('click', function() {
+                setFocusPane("The Sawmill");
+                focuspane.open(map, sawmill);
                 setTarget(sawmill);
+                setReadingString(sawmillString);
             });
-            
-            
-          
-
-            var legend = document.getElementById('legend');
-            var bathroom = document.createElement('div');
-            bathroom.innerHTML = '<img src="Images/bathroom icon.png">';
-            legend.appendChild(bathroom);
-
-            map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
-
+            var printshop = new google.maps.Marker({
+                position: new google.maps.LatLng(
+                    42.107523,
+                    -72.097651
+                ),
+                icon: printer,
+                map: map,
+                title: 'Print Shop'
+            });
+            printshop.addListener('click', function() {
+                setFocusPane("The Print Shop");
+                focuspane.open(map, printshop);
+                setTarget(printshop);
+                setReadingString(printshopString);
+            });
+            var bank = new google.maps.Marker({
+                position: new google.maps.LatLng(
+                    42.107016,
+                    -72.097884
+                ),
+                icon: bankicon,
+                map: map,
+                title: 'Thompson Bank'
+            });
+            bank.addListener('click', function() {
+                setFocusPane("The Thompson Bank");
+                focuspane.open(map, bank);
+                setTarget(bank);
+                setReadingString(bankString);
+            });
+            var blacksmithshop = new google.maps.Marker({
+                position: new google.maps.LatLng(
+                    42.104691,
+                    -72.095655
+                ),
+                icon: blacksmithicon,
+                map: map,
+                title: 'Blacksmith Shop'
+            });
+            blacksmithshop.addListener('click', function() {
+                setFocusPane("Blacksmith Shop");
+                focuspane.open(map, blacksmithshop);
+                setTarget(blacksmithshop);
+                setReadingString(blacksmithString);
+            });
+            var coveredbridge = new google.maps.Marker({
+                position: new google.maps.LatLng(
+                    42.105967,
+                    -72.096099
+                ),
+                icon: bridgeicon,
+                map: map,
+                title: 'Covered Bridge'
+            });
+            coveredbridge.addListener('click', function() {
+                setFocusPane("Covered Bridge");
+                focuspane.open(map, coveredbridge);
+                setTarget(coveredbridge);
+                setReadingString(coveredbridgeString);
+            });
+            var gristmill = new google.maps.Marker({
+                position: new google.maps.LatLng(
+                    42.105090,
+                    -72.095187
+                ),
+                icon: waterwheelicon,
+                map: map,
+                title: 'Grist Mill'
+            });
+            gristmill.addListener('click', function() {
+                setFocusPane("Grist Mill");
+                focuspane.open(map, gristmill);
+                setTarget(gristmill);
+                setReadingString(gristmillString);
+            });
+            /** 
+            ------------------------------------------------------------------------------------
+            USERS ADDING NEW LOCATIONS, ADD LOCATIONS ABOVE THIS SECTION BENEATH THE LAST ENTRY
+            ------------------------------------------------------------------------------------
+            **/
+            // settingsShown will be manipulated down below, it refers to whether the settings menu is currently open or not
+            var settingsShown = "visible";
+            // information section refers to the bottom left map reading pane, removing the old focus pane system. This will be an alternate version of the map that may be easier to read and use
+            var readingpane = document.getElementById('readingpane');
+            map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(readingpane);
+            //readingString refers to content inside the readingPane, a function must be called each time the readinpane is changed            
+            function setReadingString(currentString) {
+                var readingString = document.getElementById('infostring');
+                readingString.innerHTML = currentString;
+            }
             var directionPanel = document.getElementById('directionpanel');
             var sentence = document.createElement('div');
             var button = document.createElement('div');
@@ -328,14 +409,58 @@
             directionPanel.appendChild(sentence);
             directionPanel.appendChild(button);
             map.controls[google.maps.ControlPosition.TOP_CENTER].push(directionPanel);
-
-
+            // Set default Icon Size First
+            var iconSize = 2;
+            // Settings Menu Code below, each button will have a listener attached in next block
+            var settingsMenu = document.getElementById('settings');
+            // Icon Settings can be turned on or off entirely to save space on the Web App
+            var iconSettings = document.createElement('div');
+            var iconSizeSmall = document.createElement('div');
+            iconSizeSmall.innerHTML = '<button id="iconSmall" type="button" class="iconSize"> Small Icons </button>';
+            var iconSizeMed = document.createElement('div');
+            iconSizeMed.innerHTML = '<button id="iconMed" class="iconSize"> Medium Icons </button>';
+            var iconSizeLarge = document.createElement('div');
+            iconSizeLarge.innerHTML = '<button id="iconLarge" class="iconSize"> Large Icons </button>';
+            // Adds Buttons to the Settings Menu
+            settingsMenu.appendChild(iconSettings);
+            iconSettings.appendChild(iconSizeSmall);
+            iconSettings.appendChild(iconSizeMed);
+            iconSettings.appendChild(iconSizeLarge);
+            // This code block manipulates the settingshown value to open or close the settings menu depending on the current value using an if/switch
+            document.getElementById('settings').addEventListener('click', function() {
+                if (settingsShown == "hidden") {
+                    settingsShown = "visible";
+                } else {
+                    settingsShown = "hidden";
+                };
+                toggleSettings();
+            });
+            // Toggle Settings can be called from anywhere in the initmap js code, but will always refer to the settingsShown value
+            function toggleSettings() {
+                iconSettings.style.visible = settingsShown;
+            };
+            // Set the Listeners and the amount each icon dimension will be multiplied by
+            var iconSmall = document.getElementById('iconSmall').addEventListener('click', function() {
+                iconSize = 1.5;
+                iconScaling();
+            });
+            var iconMed = document.getElementById('iconMed').addEventListener('click', function() {
+                iconSize = 2.5;
+                iconScaling();
+            });
+            var iconLarge = document.getElementById('iconLarge').addEventListener('click', function() {
+                iconSize = 3;
+                iconScaling();
+            });
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(settingsMenu);
             google.maps.event.addListener(map, 'zoom_changed', function() {
+                iconScaling();
+            });
 
+            function iconScaling() {
                 var zoom = map.getZoom();
-                markerWidth = (zoom / 1.5) * 2
-                markerHeight = (zoom / 1.5) * 2
-
+                markerWidth = (zoom / 1.5) * iconSize
+                markerHeight = (zoom / 1.5) * iconSize
                 for (var i = 0; i < 3; i++) {
                     var bathroom = bathrooms[i];
                     bathroom.setIcon({
@@ -368,8 +493,35 @@
                     url: book,
                     scaledSize: new google.maps.Size(markerWidth, markerHeight)
                 });
-
-            });
+                tinshop.setIcon({
+                    url: tin,
+                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                });
+                sawmill.setIcon({
+                    url: saw,
+                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                });
+                bank.setIcon({
+                    url: bankicon,
+                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                });
+                printshop.setIcon({
+                    url: printer,
+                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                });
+                blacksmithshop.setIcon({
+                    url: blacksmithicon,
+                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                });
+                coveredbridge.setIcon({
+                    url: bridgeicon,
+                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                });
+                gristmill.setIcon({
+                    url: waterwheelicon,
+                    scaledSize: new google.maps.Size(markerWidth, markerHeight)
+                });
+            };
 
             function handleLocationError(browserHasGeolocation, infoWindow, pos) {
                 infoWindow.setPosition(pos);
@@ -378,7 +530,6 @@
                     'Error: Your browser doesn\'t support geolocation.');
                 infoWindow.open(map);
             };
-
             var start;
 
             function calculateAndDisplayRoute(directionsService, directionsDisplay) {
@@ -389,11 +540,9 @@
                     };
                     start = pos.lat + "," + pos.lng;
                 });
-
                 var targetlat = targetobj.getPosition().lat();
                 var targetlng = targetobj.getPosition().lng();
                 var target = targetlat + "," + targetlng;
-
                 directionsService.route({
                     origin: start,
                     destination: target,
@@ -413,17 +562,109 @@
                 targetobj = newTarget;
                 updateSentence();
             };
-
             // Values below are related to listening to the directions panel added at the top of the web app
             function updateSentence() {
                 sentenceString.innerHTML = null;
                 sentenceString.innerHTML = 'Want Directions to ' + targetobj.title + '?';
             };
-
             document.getElementById('submit').addEventListener('click', function() {
                 calculateAndDisplayRoute(directionsService, directionsDisplay);
             });
-        }
+            /*
+             * The google.maps.event.addListener() event waits for
+             * the creation of the infowindow HTML structure 'domready'
+             * and before the opening of the infowindow defined styles
+             * are applied.
+             */
+            google.maps.event.addListener(focuspane, 'domready', function() {
+                // Reference to the DIV which receives the contents of the infowindow using jQuery
+                var iwOuter = $('.gm-style-iw');
+                /* The DIV we want to change is above the .gm-style-iw DIV.
+                 * So, we use jQuery and create a iwBackground variable,
+                 * and took advantage of the existing reference to .gm-style-iw for the previous DIV with .prev().
+                 */
+                var iwBackground = iwOuter.prev();
+                // Remove the background shadow DIV
+                iwBackground.children(':nth-child(2)').css({
+                    'display': 'none'
+                });
+                // Remove the white background DIV
+                iwBackground.children(':nth-child(4)').css({
+                    'display': 'none'
+                });
+                // Taking advantage of the already established reference to
+                // div .gm-style-iw with iwOuter variable.
+                // You must set a new variable iwCloseBtn.
+                // Using the .next() method of JQuery you reference the following div to .gm-style-iw.
+                // Is this div that groups the close button elements.
+                var iwCloseBtn = iwOuter.next();
+                // Apply the desired effect to the close button
+                iwCloseBtn.css({
+                    opacity: '.7', // by default the close button has an opacity of 0.7
+                    right: '16px',
+                    top: '-2px', // button repositioning
+                    border: '2px solid #d38476', // increasing button border and new color
+                    'border-radius': '0px', // circular effect
+                    'box-shadow': '0 0 2px #3990B9' // 3D effect to highlight the button
+                });
+                // The API automatically applies 0.7 opacity to the button after the mouseout event.
+                // This function reverses this event to the desired value.
+                iwCloseBtn.mouseout(function() {
+                    $(this).css({
+                        opacity: '.7'
+                    });
+                });
+            });
+
+            function getUserLocation(map) {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        var pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        user.setPosition(pos);
+                        user.setMap(map);
+                        //TODO set user icon to position, lat longitude coordinates
+                        // This performs the AJAX request at bottom of page for server logging
+                        submit(position.coords.latitude, position.coords.longitude);
+                    }, function() {
+                        handleLocationError(true, focuspane, map.getCenter());
+                    });
+                } else {
+                    // Browser doesn't support Geolocation
+                    handleLocationError(false, focuspane, map.getCenter());
+                }
+            };
+            // call the function after every few seconds
+            if (navigator.geolocation) {
+                setInterval(function() {
+                    getUserLocation(map);
+                }, 3000);
+            };
+            // EXITS OUT OF FOCUSPANEL Incredibly important for EndUser
+            google.maps.event.addListener(map, "click", function(event) {
+                focuspane.close();
+            });
+
+            function submit(userlat, userlong) {
+                var submitlat = userlat;
+                var submitlong = userlong;
+                // ajax request for submitting user location to sql server
+                $.ajax({
+                    type: 'POST',
+                    url: 'log.php',
+                    data: {
+                        lat: userlong,
+                        long: userlat
+                    },
+                    success: function(response) {
+                        $('#result').html(response);
+                    }
+                });
+            }
+        };
+
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCt7o7MAPRpmeCI_YQftMWcRh9xezxO5A4 	&callback=initMap" async defer></script>
 </body>

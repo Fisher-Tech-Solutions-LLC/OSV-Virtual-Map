@@ -1,0 +1,13 @@
+var pot = 'Images/clay pot.png';
+var giftshop = 'Images/gift shop icon.png';
+var barn = 'Images/barn.png';
+var cross = 'Images/cross.png';
+var tin = 'Images/tin icon.png';
+var book = 'Images/book.png';
+var sheep = 'Images/sheep.png';
+var saw = 'Images/sawmill icon.png';
+var printer = 'Images/print icon.png';
+var bankicon = 'Images/bank icon.png';
+var blacksmithicon = 'Images/blacksmith icon.png';
+var bridgeicon = 'Images/bridge icon.png';
+var waterwheelicon = 'Images/waterwheel icon.png';
